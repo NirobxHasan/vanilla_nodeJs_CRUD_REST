@@ -1,7 +1,7 @@
 const http = require('http');
 const products = require('./data/products')
 
-const {getAllProducts,getProduct,createProduct,updateProduct} = require('./controllers/productController')
+const {getAllProducts,getProduct,createProduct,updateProduct,deleteProduct} = require('./controllers/productController')
  
 const server = http.createServer((req,res)=>{
     // res.statusCode = 200;
@@ -16,16 +16,24 @@ const server = http.createServer((req,res)=>{
 
     if(req.url === '/api/products' && req.method==='GET'){
         getAllProducts(req,res)
-    } else if( req.url === '/api/products' && req.method==='POST' ){
+    } 
+    else if( req.url === '/api/products' && req.method==='POST' ){
             createProduct(req,res);
     
-    } else if( req.url.match(/\/api\/products\/([0-9]+)/) && req.method === 'GET' ){
+    }
+     else if( req.url.match(/\/api\/products\/([0-9]+)/) && req.method === 'GET' ){
             const id = req.url.split('/')[3]
             getProduct(req,res,id)
-    }else if( req.url.match(/\/api\/products\/([0-9]+)/) && req.method === 'PUT' ){
+    }
+    else if( req.url.match(/\/api\/products\/([0-9]+)/) && req.method === 'PUT' ){
         const id = req.url.split('/')[3]
         updateProduct(req,res,id)
-    }else{
+    }
+    else if( req.url.match(/\/api\/products\/([0-9]+)/) && req.method === 'DELETE' ){
+        const id = req.url.split('/')[3]
+        deleteProduct(id,req,res)
+    }
+    else{
         res.writeHead(404,{'Content-Type': 'application/json'})
         res.end(JSON.stringify({msg: 'Not Found'}))
     }
