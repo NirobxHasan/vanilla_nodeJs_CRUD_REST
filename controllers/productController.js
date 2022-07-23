@@ -50,7 +50,7 @@ async function createProduct(req,res){
         //     res.end(JSON.stringify(newProduct))
         // })
 
-        const body = await getBodyData(req);
+            const body = await getBodyData(req);
             const {name,description,price } = JSON.parse(body) ;
             const product = {
                 name,description,price
@@ -65,8 +65,36 @@ async function createProduct(req,res){
     }
 }
 
+
+async function updateProduct(req,res,id){
+    try {
+        const product = await Product.findById(id)
+        if(!product){
+            res.writeHead(404, {'Content-Type': 'application/json'})
+            res.end(JSON.stringify({msg:'Product Not Found.'})) 
+        }else{
+            const body = await getBodyData(req);
+            const {name,description,price } = JSON.parse(body) ;
+            const productData = {
+                name: name || product.name,
+                description: description || product.description,
+                price: price || product.price
+            }
+
+            const updProduct = await Product.update(id,productData)
+            res.writeHead(201, {'Content-Type': 'application/json'})
+            res.end(JSON.stringify(updProduct))
+
+        }
+        
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports ={
     getAllProducts,
     getProduct,
-    createProduct
+    createProduct,
+    updateProduct
 }

@@ -1,7 +1,7 @@
 const http = require('http');
 const products = require('./data/products')
 
-const {getAllProducts,getProduct,createProduct} = require('./controllers/productController')
+const {getAllProducts,getProduct,createProduct,updateProduct} = require('./controllers/productController')
  
 const server = http.createServer((req,res)=>{
     // res.statusCode = 200;
